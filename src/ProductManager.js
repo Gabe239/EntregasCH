@@ -20,6 +20,7 @@ class ProductManager {
 
   async addProduct(title, description, price, thumbnail, code, stock) {
     try {
+
       this.products = await this.getProducts();
 
       if (!title || !description || !price || !thumbnail || !code || !stock) {
