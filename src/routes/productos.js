@@ -4,7 +4,7 @@ const router = express.Router();
 import ProductManager from '../ProductManager.js';
 const productManager = new ProductManager('./data.json');
 
-
+import { io } from '../app.js';
 
 router.get("/", async (req, res) => {
   try {
@@ -39,9 +39,10 @@ router.get('/:pid', async (req, res) => {
 router.post('/', async (req, res) => {
 
   const newProduct = req.body;
+  
 
   try {
-    
+    console.log(newProduct);
     await productManager.addProduct(
       newProduct.title,
       newProduct.description,
@@ -50,7 +51,9 @@ router.post('/', async (req, res) => {
       newProduct.code,
       newProduct.stock
     );
-    
+
+    io.emit("product-added", newProduct);
+
     return res.status(201).json(newProduct);
   } catch (error) {
     return res.status(500).json({ error: 'Error al agregar el producto' });
